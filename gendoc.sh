@@ -31,7 +31,7 @@ MOUNT_FLAGS=(
 
 if [[ "${LAYOUT_DIR}" ]]; then
   LAYOUT_DIR=$(realpath "${LAYOUT_DIR}")
-  MOUNT_FLAGS+=("--mount type=bind,src="${LAYOUT_DIR}",dst=/layout/")
+  MOUNT_FLAGS+=("--mount type=bind,src="${LAYOUT_DIR}",dst=/styling/")
 fi
 
 docker run \

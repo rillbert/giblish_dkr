@@ -2,12 +2,8 @@
 
 FLAGS=""
 
-if [[ -d "layout" ]]; then
-  FLAGS="${FLAGS} -r layout -s giblish"
-fi
-
-if [[ -f "layout/gibopts.txt" ]]; then
-  FLAGS="${FLAGS} $(cat layout/gibopts.txt)"
+if [[ -f "styling/gibopts.txt" ]]; then
+  FLAGS="${FLAGS} -r styling $(cat styling/gibopts.txt)"
 fi
 
 if [[ -z "${FLAGS}" ]]; then
