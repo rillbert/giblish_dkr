@@ -34,8 +34,17 @@ if [[ "${LAYOUT_DIR}" ]]; then
   MOUNT_FLAGS+=("--mount type=bind,src="${LAYOUT_DIR}",dst=/styling/")
 fi
 
+echo "using directories: src=${SRC_DIR} dst=${DST_DIR}"
+
 docker run \
     -u $(id -u ${USER}):$(id -g ${USER}) \
     --rm \
     ${MOUNT_FLAGS[@]} \
-    gibdk:latest
+    rillbert/giblish:latest
+
+
+# docker run \
+#     -u $(id -u ${USER}):$(id -g ${USER}) \
+#     -it \
+#     ${MOUNT_FLAGS[@]} \
+#     rillbert/giblish:latest

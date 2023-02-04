@@ -1,0 +1,13 @@
+= Building the image
+
+----
+# build the image
+docker build -t rillbert/giblish .
+
+# push to docker hub
+docker login
+# fill in user id/passwd
+
+# push the image
+docker push -t rillbert/giblish .
+----
