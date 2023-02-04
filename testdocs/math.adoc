@@ -1,0 +1,22 @@
+= Test math expressions
+:stem: latexmath
+
+== Ohms law
+
+Mr ohm realized that stem:[U = R * I]
+
+A matrix can be written as stem:[[[a,b\],[c,d\]\]((n),(k))].
+
+
+.Ohm's law
+[stem]
+++++
+\[
+  A_{2\times2} =
+  \left[ {\begin{array}{cc}
+    a_{11} & a_{12} \\
+    a_{21} & a_{22} \\
+  \end{array} } \right]
+\]
+++++
+
