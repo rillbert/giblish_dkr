@@ -1,9 +1,9 @@
-# $ docker run -it --entrypoint="" pandoc/core:2.19.2 cat /etc/apk/repositories
-# http://dl-cdn.alpinelinux.org/alpine/v3.16/main
-# http://dl-cdn.alpinelinux.org/alpine/v3.16/community
-#
-ARG ASCIIDOCTOR_VERSION=1.37
+# Compile an image with all asciidoctor tools together with giblish and
+# kramdoc
+
+ARG ASCIIDOCTOR_VERSION=1.49
 FROM asciidoctor/docker-asciidoctor:${ASCIIDOCTOR_VERSION} as asciidoctor-build
+
 
 WORKDIR /root
 
@@ -19,11 +19,13 @@ RUN wget -q ${C4_PLANTUML_URL}/C4_Deployment.puml -O plantuml-stdlib/C4_Deployme
 RUN wget -q ${C4_PLANTUML_URL}/C4_Dynamic.puml -O plantuml-stdlib/C4_Dynamic.puml
 
 # create an image stage to be able to copy the C4 stuff into the relevant dir
-FROM e762575aa12e as stage1
+FROM asciidoctor-build as stage1
 COPY --from=asciidoctor-build /root/plantuml-stdlib /usr/plantuml-stdlib
 
-# install giblish
-RUN gem install --no-document giblish
+# install giblish and kramdoc
+RUN gem install --no-document kramdown-asciidoc && \
+    gem install --no-document giblish
+
 
 # create a font-cache to prevent "Fontconfig error: No writable cache directories"
 RUN fc-cache -s
