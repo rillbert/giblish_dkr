@@ -18,10 +18,11 @@ To generate html files from a directory tree of adoc files using the default asc
 [source,bash]
 ----
 # clone this repo
-$ git clone git@github.com:rillbert/giblish_dkr.git --depth=1
+git clone git@github.com:rillbert/giblish_dkr.git --depth=1
 
-# fetch and run the image by using the helper script 'gendocs.sh'
-$ giblish_dkr/gendoc.sh my_src_dir my_dst_dir
+# fetch the image and run giblish on all adoc files under 'my_src_dir'
+# the output will be placed in 'my_dst_dir'
+giblish_dkr/gendoc.sh my_src_dir my_dst_dir
 ----
 
 To generate pdf:s, add the `layout_dir` option to the `gendoc.sh` script. Within the layout dir, specify giblish flags in a `gibopts.txt` and/or layout assets in the same way as you would when running giblish standalone.

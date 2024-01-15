@@ -1,7 +1,7 @@
 # Compile an image with all asciidoctor tools together with giblish and
 # kramdoc
 
-ARG ASCIIDOCTOR_VERSION=1.57
+ARG ASCIIDOCTOR_VERSION=1.60
 FROM asciidoctor/docker-asciidoctor:${ASCIIDOCTOR_VERSION} as asciidoctor-build
 
 ENV C4_PLANTUML_VERSION v2.8.0
