@@ -1,16 +1,16 @@
 # Compile an image with all asciidoctor tools together with giblish and
 # kramdoc
 
-ARG ASCIIDOCTOR_VERSION=1.49
+ARG ASCIIDOCTOR_VERSION=1.57
 FROM asciidoctor/docker-asciidoctor:${ASCIIDOCTOR_VERSION} as asciidoctor-build
 
+ENV C4_PLANTUML_VERSION v2.8.0
+ENV C4_PLANTUML_URL https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/${C4_PLANTUML_VERSION}
 
 WORKDIR /root
 
 # make the C4 extensions available to plantuml
 RUN mkdir plantuml-stdlib
-ENV C4_PLANTUML_VERSION v2.4.0
-ENV C4_PLANTUML_URL https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/${C4_PLANTUML_VERSION}
 RUN wget -q ${C4_PLANTUML_URL}/C4.puml -O plantuml-stdlib/C4.puml
 RUN wget -q ${C4_PLANTUML_URL}/C4_Component.puml -O plantuml-stdlib/C4_Component.puml
 RUN wget -q ${C4_PLANTUML_URL}/C4_Container.puml -O plantuml-stdlib/C4_Container.puml
