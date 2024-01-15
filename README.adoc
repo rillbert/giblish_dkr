@@ -1,4 +1,4 @@
-= A docker image for Giblish
+= Use giblish via docker
 
 This repo enables an easy way to run https://github.com/rillbert/giblish[giblish] without a separate install of ruby or any other dependency from the https://github.com/search?q=asciidoctor&type=repositories[asciidoctor] toolchain.
 
