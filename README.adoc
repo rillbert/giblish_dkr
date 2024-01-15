@@ -2,7 +2,7 @@
 
 This repo enables an easy way to run https://github.com/rillbert/giblish[giblish] without a separate install of ruby or any other dependency from the https://github.com/search?q=asciidoctor&type=repositories[asciidoctor] toolchain.
 
-A docker image is used to encapsulate all dependencies, and a helper script is provided to make it easy to run giblish. This makes it a very compact way of getting html or pdf output from a directory tree of asciidoc files.
+A docker image is used to encapsulate all dependencies and a helper script is provided to make it easy to run giblish. This makes it a very compact way of getting html or pdf output from a directory tree of asciidoc files.
 
 == Using this repo
 
@@ -20,11 +20,11 @@ To generate html files from a directory tree of adoc files using the default asc
 # clone this repo
 $ git clone git@github.com:rillbert/giblish_dkr.git --depth=1
 
-# build and run the image by using the helper script 'gendocs.sh'
+# fetch and run the image by using the helper script 'gendocs.sh'
 $ giblish_dkr/gendoc.sh my_src_dir my_dst_dir
 ----
 
-To generate pdf:s, add the `layout_dir` option to the `gendoc.sh` script. Within the layout dir, specify giblish flags in a `gibopts.txt` and/or layout assets in the same way as for giblish.
+To generate pdf:s, add the `layout_dir` option to the `gendoc.sh` script. Within the layout dir, specify giblish flags in a `gibopts.txt` and/or layout assets in the same way as you would when running giblish standalone.
 
 For example, to generate a pdf using the default asciidoctor stylesheet, do the following:
 
@@ -40,20 +40,23 @@ $ giblish_dkr/gendoc.sh my_layout_assets_dir my_src_dir my_dst_dir
 
 The `layout_dir` can contain any number of files and subdirectories. It holds one or more css/yml for specifying different formats as well as images and other assets referenced by the css/yml files.
 
-An example of a more complex layout_dir is shown below:
+An example of how a more complex layout_dir could look like is provided below:
 
 [source,bash]
 ----
 .../layout_assets
+      # fonts referenced by the css/yml
       |--- fonts
-          # example of fonts referenced by the css/yml
           |---- ZenKakuGothicNew-Black.ttf
           |---- ZenKakuGothicNew-Bold.ttf
           |---- ZenKakuGothicNew-Light.ttf
           |---- ZenKakuGothicNew-Medium.ttf
           |---- ZenKakuGothicNew-Regular.ttf
-      # the file holding the flags for giblish
+
+      # the file with the flags to-be supplied to giblish
+      # (e.g. "-f pdf -s my_second_pdf_layout")
       |---- gibopts.txt
+
       # css/yml files as required by the asciidoctor toolchain, it is possible to have multiple
       # css/yml files for different layouts. It is the flags in the gibopts.txt file that
       # determines which css/yml file to use.
@@ -61,7 +64,8 @@ An example of a more complex layout_dir is shown below:
       |---- my_first_pdf_layout.yml
       |---- my_second_html_layout.yml
       |---- my_second_pdf_layout.yml
-      # ... assets for the layout, e.g. a logo file) referenced by the css/yml ...
+
+      # ... assets for the layout, e.g. a logo file) referenced from the css/yml files...
       |---- logo.png
       # ...
 ----
@@ -75,11 +79,17 @@ The `gendoc.sh` script is a generic wrapper for running giblish from the `rillbe
 
 This way, you can easily generate docs with different layouts from different repos, and still keep the layout assets and gibopts.txt file in the repo where they belong.
 
+== Notes
+
+ * The `gendoc.sh` script is a wrapper for the `rillbert/giblish:latest` docker image. Found https://hub.docker.com/repository/docker/rillbert/giblish/general[here].
+ * The `rilbert/giblish:latest` image includes a script that activates the `kramdoc` tool from the asciidoctor toolchain. All markdown files found in the source directory will thus be converted to asciidoc before giblish is run.
+
 == DISCLAIMER
 
-This repo is not affiliated with the asciidoctor project in any way. It is a personal project to make it easier to use giblish.
-
-It is provided as-is and I don't intend to provide a strict, versioned release cycle. I you find it useful, great! If you want more control, you can always fork it and tweak scripts and docker images to your liking
+ * This repo is not affiliated with the asciidoctor project in any way. It is a personal project to make it easier to use giblish.
+ * It is provided as-is and I don't intend to provide a strict, versioned release cycle. I you find it useful, great!
+ * The same goes for the `rillbert/giblish:latest` docker image.
+ * If you want more control, you can always fork it and tweak scripts and docker images to your liking
 
 
 == Developing for this repo
@@ -95,5 +105,5 @@ docker login
 # fill in user id/passwd
 
 # push the image
-docker push -t rillbert/giblish .
+docker push rillbert/giblish
 ----
