@@ -4,14 +4,7 @@ This repo enables an easy way to run https://github.com/rillbert/giblish[giblish
 
 A docker image is used to encapsulate all dependencies and a helper script is provided to make it easy to run giblish. This makes it a very compact way of getting html or pdf output from a directory tree of asciidoc files.
 
-== Using this repo
-
-Prerequisites::
-
- * docker
- * git
- * a bash shell
- * internet access to the docker hub
+== Quick start
 
 To generate html files from a directory tree of adoc files using the default asciidoctor stylesheet, do the following:
 
@@ -24,6 +17,14 @@ git clone git@github.com:rillbert/giblish_dkr.git --depth=1
 # the output will be placed in 'my_dst_dir'
 giblish_dkr/gendoc.sh my_src_dir my_dst_dir
 ----
+
+Prerequisites::
+
+ * docker
+ * git
+ * a bash shell
+ * internet access to the docker hub
+
 
 To generate pdf:s, add the `layout_dir` option to the `gendoc.sh` script. Within the layout dir, specify giblish flags in a `gibopts.txt` and/or layout assets in the same way as you would when running giblish standalone.
 
