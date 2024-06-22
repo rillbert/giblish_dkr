@@ -29,12 +29,18 @@ MOUNT_FLAGS=(
     "--mount type=bind,src="${DST_DIR}",dst=/dst/"
 )
 
+echo "-  using directories:"
+echo "     src=${SRC_DIR}"
+echo "     dst=${DST_DIR}"
+
 if [[ "${LAYOUT_DIR}" ]]; then
   LAYOUT_DIR=$(realpath "${LAYOUT_DIR}")
   MOUNT_FLAGS+=("--mount type=bind,src="${LAYOUT_DIR}",dst=/styling/")
+  echo "     styling=${LAYOUT_DIR}"
 fi
 
-echo "using directories: src=${SRC_DIR} dst=${DST_DIR}"
+echo ""
+echo "- start the giblish docker container"
 
 docker run \
     -u $(id -u ${USER}):$(id -g ${USER}) \
