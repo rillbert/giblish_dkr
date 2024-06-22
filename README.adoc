@@ -1,8 +1,8 @@
 = Use giblish via docker
 
-This repo enables an easy way to run https://github.com/rillbert/giblish[giblish] without a separate install of ruby or any other dependency from the https://github.com/search?q=asciidoctor&type=repositories[asciidoctor] toolchain.
+This repo provides an easy way to run https://github.com/rillbert/giblish[giblish] without a separate install of ruby or any other dependency from the https://github.com/search?q=asciidoctor&type=repositories[asciidoctor] toolchain.
 
-A docker image is used to encapsulate all dependencies and a helper script is provided to make it easy to run giblish. This makes it a very compact way of getting html or pdf output from a directory tree of asciidoc files.
+A docker image is used to encapsulate all dependencies and a helper script is provided to make it easy to run giblish via the docker image. This makes it a compact way of getting html or pdf output from a directory tree of asciidoc files.
 
 == Quick start
 
@@ -13,8 +13,9 @@ To generate html files from a directory tree of adoc files using the default asc
 # clone this repo
 git clone git@github.com:rillbert/giblish_dkr.git --depth=1
 
-# fetch the image and run giblish on all adoc files under 'my_src_dir'
-# the output will be placed in 'my_dst_dir'
+# run the helper script. It fetches the docker image and runs
+# giblish on all adoc files under 'my_src_dir'  the output will
+# be placed in 'my_dst_dir'
 giblish_dkr/gendoc.sh my_src_dir my_dst_dir
 ----
 
@@ -25,24 +26,46 @@ Prerequisites::
  * a bash shell
  * internet access to the docker hub
 
+To use a custom theme, two things must be in place:
 
-To generate pdf:s, add the `layout_dir` option to the `gendoc.sh` script. Within the layout dir, specify giblish flags in a `gibopts.txt` and/or layout assets in the same way as you would when running giblish standalone.
+ . a directory containing all assets needed for the theme
+ . a `gibopts.txt` file that contains the parameters that point to the theme (see below)
 
-For example, to generate a pdf using the default asciidoctor stylesheet, do the following:
+
+=== gibopts.txt
+
+The docker image will parse a file named `gibopts.txt` for options to propagate to `giblish`.
+The first `gibopts.txt` file found in:
+
+  <src_dir>/gibopts.txt
+  <layout_dir>/gibopts.txt
+
+is used. If no `gibopts.txt` file is found, giblish is run without any options
+
+For example, to generate a pdf using the default asciidoctor stylesheet, do one of the following:
 
 [source,bash]
 ----
-# create a layout_dir and add a gibopts.txt file to specify pdf output.
+# 1. put a gibopts.txt file in the layout directory
 $ mkdir my_layout_assets_dir
 $ echo "-f pdf" > my_layout_assets_dir/gibopts.txt
 
-# assuming you have cloned the repo as above, do
+# OR
+
+# 2. put a gibopts.txt file in the top dir of the src (this file will
+#    override any gibopts.txt file found in the layout directory)
+$ echo "-f pdf" > my_src_dir/gibopts.txt
+
+# run the helper script
 $ giblish_dkr/gendoc.sh my_layout_assets_dir my_src_dir my_dst_dir
+
 ----
 
-The `layout_dir` can contain any number of files and subdirectories. It holds one or more css/yml for specifying different formats as well as images and other assets referenced by the css/yml files.
+=== The `layout` directory
 
-An example of how a more complex layout_dir could look like is provided below:
+The `layout` directory can contain any number of files and subdirectories. It holds one or more css/yml for specifying different formats/themes as well as images and other assets referenced by the css/yml files.
+
+An example of how a more complex `layout` directory could look like is provided below:
 
 [source,bash]
 ----
@@ -55,7 +78,7 @@ An example of how a more complex layout_dir could look like is provided below:
           |---- ZenKakuGothicNew-Medium.ttf
           |---- ZenKakuGothicNew-Regular.ttf
 
-      # the file with the flags to-be supplied to giblish
+      # giblish options used if no gibopts.txt is found in the src dir
       # (e.g. "-f pdf -s my_second_pdf_layout")
       |---- gibopts.txt
 
@@ -72,19 +95,22 @@ An example of how a more complex layout_dir could look like is provided below:
       # ...
 ----
 
+=== Markdown-to-asciidoc conversion
+
+If the special parameter `--convert-md` is specified in `gibopts.txt`, the docker image invokes the `kramdoc` tool before invoking giblish. All markdown files found in the source directory will thus be converted to asciidoc before giblish is run.
+
 == Re-using the scripts and layout assets
 
-The `gendoc.sh` script is a generic wrapper for running giblish from the `rillbert/giblish:latest` docker image. One useful use case is:
+The `gendoc.sh` script is a wrapper to help running giblish from the `rillbert/giblish:latest` docker image. One useful use case is:
 
  . copy and commit the `gendoc.sh` script to a directory in the git repo(s) from where you want to generate docs.
- . add and commit a `layout_dir` directory containing the layout assets and gibopts.txt file for each specific repo.
+ . add and commit a `layout` directory containing the layout assets and gibopts.txt file for each specific repo.
 
 This way, you can easily generate docs with different layouts from different repos, and still keep the layout assets and gibopts.txt file in the repo where they belong.
 
 == Notes
 
  * The `gendoc.sh` script is a wrapper for the `rillbert/giblish:latest` docker image. Found https://hub.docker.com/repository/docker/rillbert/giblish/general[here].
- * The `rilbert/giblish:latest` image includes a script that activates the `kramdoc` tool from the asciidoctor toolchain. All markdown files found in the source directory will thus be converted to asciidoc before giblish is run.
 
 == DISCLAIMER
 
